@@ -99,7 +99,7 @@ public:
   template<typename U>
   Data_Object(
       Object value,
-      Data_Type<U> const & klass = Data_Type<T>::klass());
+      Data_Type<U> const & klass);
 
   //! Make a copy of a Data_Object
   /*! \param other the Data_Object to copy.

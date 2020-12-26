@@ -61,12 +61,6 @@
     <ClInclude Include="..\..\rice\Data_Type_defn.hpp" />
     <ClInclude Include="..\..\rice\Data_Type_fwd.hpp" />
     <ClInclude Include="..\..\rice\detail\Arguments.hpp" />
-    <ClInclude Include="..\..\rice\detail\Auto_Function_Self_Wrapper.hpp" />
-    <ClInclude Include="..\..\rice\detail\Auto_Function_Self_Wrapper.ipp" />
-    <ClInclude Include="..\..\rice\detail\Auto_Function_Wrapper.hpp" />
-    <ClInclude Include="..\..\rice\detail\Auto_Function_Wrapper.ipp" />
-    <ClInclude Include="..\..\rice\detail\Auto_Member_Function_Wrapper.hpp" />
-    <ClInclude Include="..\..\rice\detail\Auto_Member_Function_Wrapper.ipp" />
     <ClInclude Include="..\..\rice\detail\Caster.hpp" />
     <ClInclude Include="..\..\rice\detail\cfp.hpp" />
     <ClInclude Include="..\..\rice\detail\cfp.ipp" />
@@ -96,6 +90,7 @@
     <ClInclude Include="..\..\rice\detail\to_ruby.ipp" />
     <ClInclude Include="..\..\rice\detail\win32.hpp" />
     <ClInclude Include="..\..\rice\detail\Wrapped_Function.hpp" />
+    <ClInclude Include="..\..\rice\detail\Wrapped_Function.ipp" />
     <ClInclude Include="..\..\rice\detail\wrap_function.hpp" />
     <ClInclude Include="..\..\rice\Director.hpp" />
     <ClInclude Include="..\..\rice\Enum.hpp" />

@@ -14,11 +14,11 @@ namespace detail
 
 class Exception_Handler;
 
-template<typename Fun_T>
+template<typename Func_T>
 void define_method_and_auto_wrap(
     VALUE klass,
     Identifier name,
-    Fun_T function,
+    Func_T function,
     Data_Object<Exception_Handler> handler,
     Arguments* arguments = 0);
 

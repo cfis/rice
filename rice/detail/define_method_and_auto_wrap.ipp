@@ -6,23 +6,25 @@
 #include "Exception_Handler_defn.hpp"
 #include "../protect.hpp"
 
-template<typename Fun_T>
+template<typename Func_T>
 void Rice::detail::
 define_method_and_auto_wrap(
     VALUE klass,
     Identifier name,
-    Fun_T function,
+    Func_T function,
     Data_Object<Exception_Handler> handler,
     Arguments* arguments)
 {
-  Data_Object<Wrapped_Function> f(
-      wrap_function(function, handler, arguments),
-      rb_cObject);
+  auto* wrapper = wrap_function(function, handler, arguments);
+  using WrapperType = std::remove_pointer_t<decltype(wrapper)>;
+    
+  Data_Object<WrapperType> f(wrapper, rb_cObject);
+
   Rice::protect(
       define_method_with_data,
       klass,
       name.id(),
-      f->func(),
+      RUBY_METHOD_FUNC(&WrapperType::call),
       -1,
       f);
 }
