@@ -2,6 +2,7 @@
 #define Rice__Data_Object__ipp_
 
 #include "detail/check_ruby_type.hpp"
+#include "Data_Type_defn.hpp"
 #include "protect.hpp"
 
 #include <algorithm>

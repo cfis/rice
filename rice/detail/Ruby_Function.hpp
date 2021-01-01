@@ -1,6 +1,7 @@
 #ifndef Rice__detail__ruby_function__hpp_
 #define Rice__detail__ruby_function__hpp_
 
+#include <tuple>
 #include "ruby.hpp"
 #include "../to_from_ruby_defn.hpp"
 

@@ -55,7 +55,7 @@ Struct define_struct();
  * is an instance of Struct::Instance.
  */
 class Struct
-  : public Module_impl<Class, Struct>
+  : public Class, public Module_Mixin<Struct>
 {
 public:
   //! Create a new Struct.

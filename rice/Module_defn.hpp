@@ -2,9 +2,9 @@
 #define Rice__Module_defn__hpp_
 
 #include "Object_defn.hpp"
-#include "Module_impl.hpp"
+#include "Exception_Mixin.hpp"
+#include "Module_Mixin.hpp"
 #include "to_from_ruby_defn.hpp"
-#include <memory>
 
 namespace Rice
 {
@@ -23,7 +23,7 @@ class String;
 class Module
   // TODO: we can't inherit from Builtin_Object, because Class needs
   // type T_CLASS and Module needs type T_MODULE
-  : public Module_impl<Module_base, Module>
+  : public Object, public Module_Mixin<Module>, public Exception_Mixin<Module>
 {
 public:
   //! Default construct a Module and initialize it to rb_cObject.
@@ -34,19 +34,6 @@ public:
 
   //! Return the name of the module.
   String name() const;
-
-  //! Swap with another Module.
-  void swap(Module & other);
-
-  //! Return an array containing the Module's ancestors.
-  /*! You will need to include Array.hpp to use this function.
-   */
-  Array ancestors() const;
-
-  //! Return the module's singleton class.
-  /*! You will need to include Class.hpp to use this function.
-   */
-  Class singleton_class() const;
 };
 
 //! Define a new module in the namespace given by module.
@@ -85,4 +72,3 @@ VALUE to_ruby<Rice::Module>(Rice::Module const & x)
 }
 
 #endif // Rice__Module_defn__hpp_
-

@@ -2,6 +2,7 @@
 #define Rice__Arguments__hpp_
 
 #include "../Arg_impl.hpp"
+#include <string>
 #include <sstream>
 #include <vector>
 #include "../to_from_ruby_defn.hpp"

@@ -3,14 +3,8 @@
 #include "detail/creation_funcs.hpp"
 
 Rice::Class::
-Class()
-  : Module_impl<Module, Class>()
-{
-}
-
-Rice::Class::
 Class(VALUE v)
-  : Module_impl<Module, Class>(v)
+  : Object(v)
 {
   if(::rb_type(v) != T_CLASS)
   {
@@ -19,6 +13,19 @@ Class(VALUE v)
         "Expected a Class but got a %s",
         rb_class2name(CLASS_OF(v))); // TODO: might raise an exception
   }
+}
+
+Rice::String Rice::Class::
+name() const
+{
+  return rb_class_name(*this);
+}
+
+Rice::Class
+Rice::Class::
+singleton_class() const
+{
+  return CLASS_OF(value());
 }
 
 Rice::Class & Rice::Class::

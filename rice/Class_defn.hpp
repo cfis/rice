@@ -2,8 +2,8 @@
 #define Rice__Class_defn__hpp_
 
 #include "Object_defn.hpp"
-#include "Module_impl.hpp"
-#include "Module_defn.hpp"
+#include "Exception_Mixin.hpp"
+#include "Module_Mixin.hpp"
 #include "to_from_ruby_defn.hpp"
 #include "Identifier.hpp"
 
@@ -19,15 +19,23 @@ namespace Rice
  *  for defining methods on that class.
  */
 class Class
-  : public Module_impl<Module, Class>
+  : public Object, public Module_Mixin<Class>, public Exception_Mixin<Class>
 {
 public:
   //! Default construct a new class wrapper and initialize it to
   //! rb_cObject.
-  Class();
+  Class() = default;
 
   //! Construct a new class wrapper from a ruby object of type T_CLASS.
   Class(VALUE v);
+
+  //! Return the name of the class.
+  String name() const;
+
+  //! Return the module's singleton class.
+  /*! You will need to include Class.hpp to use this function.
+   */
+  Class singleton_class() const;
 
   //! Disallow creation of an instance from Ruby code.
   /*! Undefines the singleton method allocate (or new, if using a

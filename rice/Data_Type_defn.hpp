@@ -4,6 +4,7 @@
 #include "Class_defn.hpp"
 #include "Data_Type_fwd.hpp"
 #include "detail/ruby.hpp"
+#include "Module_defn.hpp"
 #include <memory>
 #include <map>
 #include <set>
@@ -24,7 +25,7 @@ class Module;
 
 //! The base class for all instantiations of Data_Type.
 class Data_Type_Base
-  : public Module_impl<Class, Data_Type_Base>
+  : public Class
 {
 public:
   //! Default constructor.
@@ -108,7 +109,7 @@ void define_implicit_cast();
  */
 template<typename T>
 class Data_Type
-  : public Module_impl<Data_Type_Base, Data_Type<T> >
+  : public Data_Type_Base
 {
 public:
   //! The C++ type being held.
@@ -231,9 +232,9 @@ protected:
   friend Rice::Data_Type<T_> Rice::define_class(
       char const * name);
 
-  template<typename T_, typename Base_T_>
+ /* template<typename T_, typename Base_T_>
   friend Rice::Data_Type<T_> define_class(
-      char const * name);
+      char const * name);*/
 
 private:
   template<typename T_>

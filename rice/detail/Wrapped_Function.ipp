@@ -1,12 +1,12 @@
 #ifndef Rice__detail__Wrapped_Function__ipp_
 #define Rice__detail__Wrapped_Function__ipp_
 
+#include <array>
+#include <algorithm>
+
 #include "method_data.hpp"
 #include "ruby_try_catch.hpp"
 #include "Data_Object_defn.hpp"
-
-#include <array>
-#include <algorithm>
 
 namespace Rice
 {
@@ -91,7 +91,7 @@ getReceiver(VALUE receiver)
   }
   else if constexpr (std::is_same<Receiver_T, Class>::value)
   {
-    return Class(receiver);
+    //return Class(receiver);
   }
   else if constexpr (std::is_same<Receiver_T, void>::value)
   {

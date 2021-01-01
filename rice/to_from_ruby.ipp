@@ -1,7 +1,6 @@
 #include "protect.hpp"
 #include "Object.hpp"
-#include "detail/from_ruby.ipp"
-#include "detail/to_ruby.ipp"
+#include "String.hpp"
 
 // ---------------------------------------------------------------------
 /*template<>

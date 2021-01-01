@@ -1,7 +1,7 @@
 #ifndef Rice__Data_Type__ipp_
 #define Rice__Data_Type__ipp_
 
-#include "Class.hpp"
+#include "Class_defn.hpp"
 #include "String.hpp"
 #include "Data_Object.hpp"
 #include "detail/default_allocation_func.hpp"
@@ -67,8 +67,7 @@ bind(Module const & klass)
 template<typename T>
 inline Rice::Data_Type<T>::
 Data_Type()
-  : Module_impl<Data_Type_Base, Data_Type<T> >(
-      klass_ == Qnil ? rb_cObject : klass_)
+  : Data_Type_Base(klass_ == Qnil ? rb_cObject : klass_)
 {
   if(!is_bound())
   {
@@ -79,8 +78,7 @@ Data_Type()
 template<typename T>
 inline Rice::Data_Type<T>::
 Data_Type(Module const & klass)
-  : Module_impl<Data_Type_Base, Data_Type<T> >(
-      klass)
+  : Class(klass)
 {
   this->bind<void>(klass);
 }

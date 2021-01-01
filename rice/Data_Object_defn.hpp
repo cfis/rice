@@ -2,7 +2,6 @@
 #define Rice__Data_Object_defn__hpp_
 
 #include "Object_defn.hpp"
-#include "Data_Type_fwd.hpp"
 #include "ruby_mark.hpp"
 #include "detail/to_ruby.hpp"
 #include "detail/ruby.hpp"
@@ -99,7 +98,7 @@ public:
   template<typename U>
   Data_Object(
       Object value,
-      Data_Type<U> const & klass = Data_Type<T>::klass());
+    Data_Type<U> const& klass);// = Data_Type<T>::klass());
 
   //! Make a copy of a Data_Object
   /*! \param other the Data_Object to copy.

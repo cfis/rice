@@ -4,6 +4,7 @@
 #include "Builtin_Object.hpp"
 #include "to_from_ruby_defn.hpp"
 #include "detail/ruby.hpp"
+#include "detail/ruby.hpp"
 #include <iterator>
 
 namespace Rice
