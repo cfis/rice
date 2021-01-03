@@ -202,9 +202,8 @@ template<typename Enum_T, typename Enum_Traits>
 Rice::Object Rice::Enum<Enum_T, Enum_Traits>::
 eql(Object lhs, Object rhs)
 {
-  using ::from_ruby; // Workaround for g++ 3.3.3
-  bool is_equal = from_ruby<int>(compare(lhs, rhs)) == 0; 
-  return to_ruby(is_equal);
+  bool is_equal = detail::Convert<int>::from_ruby(compare(lhs, rhs)) == 0; 
+  return detail::Convert<bool>::to_ruby(is_equal);
 }
 
 template<typename Enum_T, typename Enum_Traits>
@@ -227,9 +226,8 @@ template<typename Enum_T, typename Enum_Traits>
 Rice::Object Rice::Enum<Enum_T, Enum_Traits>::
 from_int(Class klass, Object i)
 {
-  using ::from_ruby; // Workaround for g++ 3.3.3
   Rice::Data_Object<Enum_T> m(
-      new Enum_T(static_cast<Enum_T>(from_ruby<long>(i))),
+      new Enum_T(static_cast<Enum_T>(detail::Convert<long>::from_ruby(i))),
       klass);
   return m.value();
 }

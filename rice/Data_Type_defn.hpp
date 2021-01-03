@@ -1,13 +1,13 @@
 #ifndef Rice__Data_Type_defn__hpp_
 #define Rice__Data_Type_defn__hpp_
 
-#include "Class_defn.hpp"
-#include "Data_Type_fwd.hpp"
-#include "detail/ruby.hpp"
 #include <memory>
 #include <map>
 #include <set>
 
+#include "Class_defn.hpp"
+#include "detail/ruby.hpp"
+#include "Data_Object_defn.hpp"
 /*!
  *  \example map/map.cpp
  */
@@ -110,6 +110,13 @@ template<typename T>
 class Data_Type
   : public Module_impl<Data_Type_Base, Data_Type<T> >
 {
+/* DataType wrap base types - not pointers or references
+   or const or volatile qualified types. Whether we have
+   a T* or a T& or a const T* we want to wrap T.*/
+static_assert(!std::is_reference_v<T>);
+static_assert(!std::is_pointer_v<T>);
+static_assert(std::is_same_v<T, std::decay_t<T>>);
+
 public:
   //! The C++ type being held.
   typedef T Type;
@@ -140,7 +147,7 @@ public:
    *  bound.
    *  \return *this
    */
-  virtual Data_Type & operator=(Module const & klass);
+   virtual Data_Type & operator=(Module const & klass);
 
   //! Define a constructor for the class.
   /*! Creates a singleton method allocate and an instance method called
@@ -252,6 +259,40 @@ private:
   }
 };
 
+namespace detail
+{
+  /* These are the default implementations of from_ruby and to_ruby. If no other
+     specializations are matched we assume we are dealing with wrapped C++ structs/classes. */
+  template <typename T>
+  T Convert<T>::from_ruby(VALUE x)
+  {
+    using Decayed_T = std::decay_t<T>;
+    return *Data_Type<Decayed_T>::from_ruby(x);
+  }
+
+  template <typename T>
+  VALUE Convert<T>::to_ruby(const T& x)
+  {
+    return Rice::Data_Object<T>(new T(x), Rice::Data_Type<T>::klass());
+  }
+
+  // Specialize for pointers to structs/classes
+  template <typename T>
+  struct Convert<T*>
+  {
+    static T* from_ruby(VALUE x)
+    {
+      using Decayed_T = std::decay_t<T>;
+      return Data_Type<Decayed_T>::from_ruby(x);
+    }
+
+    static VALUE to_ruby(T* x)
+    {
+      using Decayed_T = std::decay_t<T>;
+      return Rice::Data_Object<Decayed_T>(x, Rice::Data_Type<T>::klass()).value();
+    }
+  };
+}
 
 } // namespace Rice
 

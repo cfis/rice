@@ -1,9 +1,10 @@
 #ifndef Rice__detail__Wrapped_Function__ipp_
 #define Rice__detail__Wrapped_Function__ipp_
 
+#include "Convert.hpp"
 #include "method_data.hpp"
-#include "ruby_try_catch.hpp"
-#include "Data_Object_defn.hpp"
+#include "../ruby_try_catch.hpp"
+#include "../Data_Object_defn.hpp"
 
 #include <array>
 #include <algorithm>
@@ -99,7 +100,7 @@ getReceiver(VALUE receiver)
   }
   else
   {
-    return from_ruby<Receiver_T>(receiver);
+    return Convert<Receiver_T>::from_ruby(receiver);
   }
 }
 
@@ -115,7 +116,7 @@ invokeNative(NativeTypes& nativeArgs)
   else
   {
     Return_T result = std::apply(this->func_, nativeArgs);
-    return to_ruby(result);
+    return Convert<Return_T>::to_ruby(result);
   }
 }
 

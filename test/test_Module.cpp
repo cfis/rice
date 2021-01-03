@@ -186,12 +186,21 @@ void define_method_int_foo_helper(Object o, int i, Foo * x)
 
 } // namespace
 
-template<>
-Foo * from_ruby<Foo *>(VALUE x)
+namespace Rice
 {
-  Foo * retval;
-  Data_Get_Struct(x, Foo, retval);
-  return retval;
+  namespace detail
+  {
+    template<>
+    struct Convert<Foo*>
+    {
+      static Foo* from_ruby(VALUE x)
+      {
+        Foo* retval;
+        Data_Get_Struct(x, Foo, retval);
+        return retval;
+      }
+    };
+  }
 }
 
 TESTCASE(define_singleton_method_int_foo)
@@ -224,7 +233,7 @@ TESTCASE(include_module)
 TESTCASE(const_set_get_by_id)
 {
   Module m(anonymous_module());
-  Object v = to_ruby(42);
+  Object v = detail::Convert<int>::to_ruby(42);
   Module & m2(m.const_set(rb_intern("FOO"), v));
   ASSERT_EQUAL(&m, &m2);
   ASSERT_EQUAL(v, m.const_get(rb_intern("FOO")));
@@ -233,7 +242,7 @@ TESTCASE(const_set_get_by_id)
 TESTCASE(const_set_get_by_identifier)
 {
   Module m(anonymous_module());
-  Object v = to_ruby(42);
+  Object v = detail::Convert<int>::to_ruby(42);
   Module & m2(m.const_set(Identifier("FOO"), v));
   ASSERT_EQUAL(&m, &m2);
   ASSERT_EQUAL(v, m.const_get(Identifier("FOO")));
@@ -242,7 +251,7 @@ TESTCASE(const_set_get_by_identifier)
 TESTCASE(const_set_get_by_string)
 {
   Module m(anonymous_module());
-  Object v = to_ruby(42);
+  Object v = detail::Convert<int>::to_ruby(42);
   Module & m2(m.const_set("FOO", v));
   ASSERT_EQUAL(&m, &m2);
   ASSERT_EQUAL(v, m.const_get("FOO"));
@@ -251,7 +260,7 @@ TESTCASE(const_set_get_by_string)
 TESTCASE(remove_const)
 {
   Module m(anonymous_module());
-  Object v = to_ruby(42);
+  Object v = detail::Convert<int>::to_ruby(42);
   m.const_set("FOO", v);
   ASSERT_EQUAL(v, m.const_get("FOO"));
   m.remove_const("FOO");

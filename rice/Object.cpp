@@ -25,7 +25,7 @@ int Rice::Object::
 compare(Object const & other) const
 {
   Object result = call("<=>", other);
-  return from_ruby<int>(result);
+  return Rice::detail::Convert<int>::from_ruby(result);
 }
 
 void Rice::Object::

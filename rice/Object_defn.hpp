@@ -5,7 +5,7 @@
  */
 
 #include "Identifier.hpp"
-#include "detail/ruby.hpp"
+#include "detail/Convert.hpp"
 
 #include <iosfwd>
 #include <vector>
@@ -207,6 +207,23 @@ extern Object const Nil;
 extern Object const True;
 extern Object const False;
 extern Object const Undef;
+
+namespace detail
+{
+  template<>
+  struct Convert<Rice::Object>
+  {
+    static Rice::Object from_ruby(VALUE x)
+    {
+      return Rice::Object(x);
+    }
+
+    static VALUE to_ruby(Rice::Object const& x)
+    {
+      return x.value();
+    }
+  };
+} // namespace Detail
 
 } // namespace Rice
 

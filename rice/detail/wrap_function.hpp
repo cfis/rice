@@ -47,23 +47,23 @@ auto* wrap_function(Return_T (*func)(Arg_T...),
 }
 
 // Call a member function on a C++ object
-template<typename Return_T, typename Self_T, typename ...Arg_T>
-auto* wrap_function(Return_T (Self_T::*func)(Arg_T...),
+template<typename Return_T, typename Receiver_T, typename ...Arg_T>
+auto* wrap_function(Return_T (Receiver_T::*func)(Arg_T...),
     std::shared_ptr<Exception_Handler> handler,
     Arguments* arguments)
 {
-  using Function_T = Return_T(Self_T::*)(Arg_T...);
-  return new Wrapped_Function<Function_T, Return_T, Self_T*, Arg_T...>(func, handler, arguments);
+  using Function_T = Return_T(Receiver_T::*)(Arg_T...);
+  return new Wrapped_Function<Function_T, Return_T, Receiver_T*, Arg_T...>(func, handler, arguments);
 }
 
 // Call a const member function on a C++ object
-template<typename Return_T, typename Self_T, typename ...Arg_T>
-auto* wrap_function(Return_T (Self_T::*func)(Arg_T...) const,
+template<typename Return_T, typename Receiver_T, typename ...Arg_T>
+auto* wrap_function(Return_T (Receiver_T::*func)(Arg_T...) const,
     std::shared_ptr<Exception_Handler> handler,
     Arguments* arguments)
 {
-  using Function_T = Return_T(Self_T::*)(Arg_T...) const;
-  return new Wrapped_Function<Function_T, Return_T, Self_T, Arg_T...>(func, handler, arguments);
+  using Function_T = Return_T(Receiver_T::*)(Arg_T...) const;
+  return new Wrapped_Function<Function_T, Return_T, Receiver_T, Arg_T...>(func, handler, arguments);
 }
 
 } // namespace detail

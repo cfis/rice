@@ -1,5 +1,6 @@
 #include "unittest.hpp"
 #include "embed_ruby.hpp"
+#include "rice/Class.hpp"
 #include "rice/Exception.hpp"
 #include "rice/String.hpp"
 

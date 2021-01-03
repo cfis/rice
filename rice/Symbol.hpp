@@ -44,21 +44,25 @@ public:
   Identifier to_id() const;
 };
 
+namespace detail
+{
+  template<>
+  struct Convert<Rice::Symbol>
+  {
+    static Rice::Symbol from_ruby(VALUE x)
+    {
+      return Rice::Symbol(x);
+    }
+
+    static VALUE to_ruby(Rice::Symbol const& x)
+    {
+      return x.value();
+    }
+  };
+} // namespace Detail
+
 } // namespace Rice
 
-template<>
-inline
-Rice::Symbol from_ruby<Rice::Symbol>(VALUE x)
-{
-  return Rice::Symbol(x);
-}
-
-template<>
-inline
-VALUE to_ruby<Rice::Symbol>(Rice::Symbol const & x)
-{
-  return x.value();
-}
 
 #include "Symbol.ipp"
 

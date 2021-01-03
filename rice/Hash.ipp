@@ -2,7 +2,6 @@
 #define Rice__Hash__ipp_
 
 #include "protect.hpp"
-#include "to_from_ruby.hpp"
 #include "Exception.hpp"
 #include "Builtin_Object.hpp"
 #include "detail/st.hpp"
@@ -57,7 +56,7 @@ template<typename T>
 inline Rice::Object Rice::Hash::Proxy::
 operator=(T const & value)
 {
-  return protect(rb_hash_aset, hash_, key_, to_ruby(value));
+  return protect(rb_hash_aset, hash_, key_, Rice::detail::Convert<T>::to_ruby(value));
 }
 
 inline void Rice::Hash::Proxy::
@@ -71,25 +70,27 @@ template<typename Key_T>
 inline Rice::Hash::Proxy const Rice::Hash::
 operator[](Key_T const & key) const
 {
-  return Proxy(*this, to_ruby(key));
+  VALUE value = Rice::detail::Convert<Key_T>::to_ruby(key);
+  return Proxy(*this, value);
 }
 
 template<typename Key_T>
 inline Rice::Hash::Proxy Rice::Hash::
 operator[](Key_T const & key)
 {
-  return Proxy(*this, to_ruby(key));
+  VALUE value = Rice::detail::Convert<Key_T>::to_ruby(key);
+  return Proxy(*this, value);
 }
 
 template<typename Value_T, typename Key_T>
 inline Value_T Rice::Hash::
 get(Key_T const & key)
 {
-  Object ruby_key(to_ruby(key));
+  Object ruby_key(Rice::detail::Convert<Key_T>::to_ruby(key));
   Object value = operator[](ruby_key);
   try
   {
-    return from_ruby<Value_T>(value);
+    return Rice::detail::Convert<Value_T>::from_ruby(value);
   }
   catch(Exception const & ex)
   {

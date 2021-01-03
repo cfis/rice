@@ -3,7 +3,7 @@
 
 #include "protect.hpp"
 #include "detail/ruby.hpp"
-#include "to_from_ruby.hpp"
+#include "detail/Convert.hpp"
 
 #include <vector>
 
@@ -17,7 +17,7 @@ call(Identifier id, ArgT... args) const
 
 template<typename ...ArgT>
 std::vector<VALUE> Rice::Object::convert_args(ArgT&... args) const {
-  return std::vector<VALUE>{ to_ruby(args)... };
+  return std::vector<VALUE>{ Rice::detail::Convert<ArgT>::to_ruby(args)... };
 }
 
 template<typename T>
@@ -26,7 +26,7 @@ iv_set(
     Identifier name,
     T const & value)
 {
-  protect(rb_ivar_set, *this, name.id(), to_ruby(value));
+  protect(rb_ivar_set, *this, name.id(), Rice::detail::Convert<T>::to_ruby(value));
 }
 
 #endif // Rice__Object__ipp_

@@ -28,9 +28,9 @@ TESTCASE(construct_from_vector_of_int)
   v.push_back(42);
   Array a(v.begin(), v.end());
   ASSERT_EQUAL(3u, a.size());
-  ASSERT(rb_equal(to_ruby(10), a[0].value()));
-  ASSERT(rb_equal(to_ruby(6), a[1].value()));
-  ASSERT(rb_equal(to_ruby(42), a[2].value()));
+  ASSERT(rb_equal(detail::Convert<int>::to_ruby(10), a[0].value()));
+  ASSERT(rb_equal(detail::Convert<int>::to_ruby(6), a[1].value()));
+  ASSERT(rb_equal(detail::Convert<int>::to_ruby(42), a[2].value()));
 }
 
 TESTCASE(construct_from_c_array)
@@ -38,11 +38,10 @@ TESTCASE(construct_from_c_array)
   int arr[] = { 10, 6, 42 };
   Array a(arr);
   ASSERT_EQUAL(3u, a.size());
-  ASSERT(rb_equal(to_ruby(10), a[0].value()));
-  ASSERT(rb_equal(to_ruby(6), a[1].value()));
-  ASSERT(rb_equal(to_ruby(42), a[2].value()));
+  ASSERT(rb_equal(detail::Convert<int>::to_ruby(10), a[0].value()));
+  ASSERT(rb_equal(detail::Convert<int>::to_ruby(6), a[1].value()));
+  ASSERT(rb_equal(detail::Convert<int>::to_ruby(42), a[2].value()));
 }
-
 
 TESTCASE(push_no_items)
 {
@@ -64,8 +63,8 @@ TESTCASE(push_two_items)
   a.push(42);
   a.push(43);
   ASSERT_EQUAL(2u, a.size());
-  ASSERT_EQUAL(42, from_ruby<int>(a[0].value()));
-  ASSERT_EQUAL(43, from_ruby<int>(a[1].value()));
+  ASSERT_EQUAL(42, detail::Convert<int>::from_ruby(a[0].value()));
+  ASSERT_EQUAL(43, detail::Convert<int>::from_ruby(a[1].value()));
 }
 
 TESTCASE(push_three_items)
@@ -75,9 +74,9 @@ TESTCASE(push_three_items)
   a.push(43);
   a.push(44);
   ASSERT_EQUAL(3u, a.size());
-  ASSERT_EQUAL(42, from_ruby<int>(a[0].value()));
-  ASSERT_EQUAL(43, from_ruby<int>(a[1].value()));
-  ASSERT_EQUAL(44, from_ruby<int>(a[2].value()));
+  ASSERT_EQUAL(42, detail::Convert<int>::from_ruby(a[0].value()));
+  ASSERT_EQUAL(43, detail::Convert<int>::from_ruby(a[1].value()));
+  ASSERT_EQUAL(44, detail::Convert<int>::from_ruby(a[2].value()));
 }
 
 TESTCASE(push_int)
@@ -85,7 +84,7 @@ TESTCASE(push_int)
   Array a;
   a.push(42);
   ASSERT_EQUAL(1u, a.size());
-  ASSERT(rb_equal(to_ruby(42), a[0].value()));
+  ASSERT(rb_equal(detail::Convert<int>::to_ruby(42), a[0].value()));
 }
 
 TESTCASE(bracket_equals)
@@ -95,7 +94,7 @@ TESTCASE(bracket_equals)
   a.push(43);
   a.push(44);
   a[1] = 10;
-  ASSERT_EQUAL(10, from_ruby<int>(a[1].value()));
+  ASSERT_EQUAL(10, detail::Convert<int>::from_ruby(a[1].value()));
 }
 
 TESTCASE(to_s)
@@ -117,9 +116,9 @@ TESTCASE(pop)
   a.push(44);
   VALUE result = a.pop();
   ASSERT_EQUAL(2u, a.size());
-  ASSERT_EQUAL(42, from_ruby<int>(a[0].value()));
-  ASSERT_EQUAL(43, from_ruby<int>(a[1].value()));
-  ASSERT_EQUAL(44, from_ruby<int>(result));
+  ASSERT_EQUAL(42, detail::Convert<int>::from_ruby(a[0].value()));
+  ASSERT_EQUAL(43, detail::Convert<int>::from_ruby(a[1].value()));
+  ASSERT_EQUAL(44, detail::Convert<int>::from_ruby(result));
 }
 
 TESTCASE(unshift)
@@ -130,10 +129,10 @@ TESTCASE(unshift)
   a.push(44);
   a.unshift(10);
   ASSERT_EQUAL(4u, a.size());
-  ASSERT_EQUAL(10, from_ruby<int>(a[0].value()));
-  ASSERT_EQUAL(42, from_ruby<int>(a[1].value()));
-  ASSERT_EQUAL(43, from_ruby<int>(a[2].value()));
-  ASSERT_EQUAL(44, from_ruby<int>(a[3].value()));
+  ASSERT_EQUAL(10, detail::Convert<int>::from_ruby(a[0].value()));
+  ASSERT_EQUAL(42, detail::Convert<int>::from_ruby(a[1].value()));
+  ASSERT_EQUAL(43, detail::Convert<int>::from_ruby(a[2].value()));
+  ASSERT_EQUAL(44, detail::Convert<int>::from_ruby(a[3].value()));
 }
 
 TESTCASE(unshift_int)
@@ -141,7 +140,7 @@ TESTCASE(unshift_int)
   Array a;
   a.unshift(42);
   ASSERT_EQUAL(1u, a.size());
-  ASSERT(rb_equal(to_ruby(42), a[0].value()));
+  ASSERT(rb_equal(detail::Convert<int>::to_ruby(42), a[0].value()));
 }
 
 TESTCASE(shift)
@@ -152,9 +151,9 @@ TESTCASE(shift)
   a.push(44);
   VALUE result = a.shift();
   ASSERT_EQUAL(2u, a.size());
-  ASSERT_EQUAL(42, from_ruby<int>(result));
-  ASSERT_EQUAL(43, from_ruby<int>(a[0].value()));
-  ASSERT_EQUAL(44, from_ruby<int>(a[1].value()));
+  ASSERT_EQUAL(42, detail::Convert<int>::from_ruby(result));
+  ASSERT_EQUAL(43, detail::Convert<int>::from_ruby(a[0].value()));
+  ASSERT_EQUAL(44, detail::Convert<int>::from_ruby(a[1].value()));
 }
 
 TESTCASE(iterate)
@@ -168,7 +167,7 @@ TESTCASE(iterate)
   Array::iterator end = a.end();
   for(int j = 0; it != end; ++j, ++it)
   {
-    ASSERT_EQUAL(ca[j], from_ruby<int>(it->value()));
+    ASSERT_EQUAL(ca[j], detail::Convert<int>::from_ruby(it->value()));
   }
 }
 
@@ -183,7 +182,7 @@ TESTCASE(const_iterate)
   Array::const_iterator end = a.end();
   for(int j = 0; it != end; ++j, ++it)
   {
-    ASSERT_EQUAL(ca[j], from_ruby<int>(*it));
+    ASSERT_EQUAL(ca[j], detail::Convert<int>::from_ruby(*it));
   }
 }
 
@@ -197,12 +196,12 @@ TESTCASE(iterate_and_change)
   Array::iterator end = a.end();
   for(int j = 0; it != end; ++j, ++it)
   {
-    int value = from_ruby<int>(it->value());
+    int value = detail::Convert<int>::from_ruby(it->value());
     *it = value + j;
   }
-  ASSERT_EQUAL(42, from_ruby<int>(a[0].value()));
-  ASSERT_EQUAL(44, from_ruby<int>(a[1].value()));
-  ASSERT_EQUAL(46, from_ruby<int>(a[2].value()));
+  ASSERT_EQUAL(42, detail::Convert<int>::from_ruby(a[0].value()));
+  ASSERT_EQUAL(44, detail::Convert<int>::from_ruby(a[1].value()));
+  ASSERT_EQUAL(46, detail::Convert<int>::from_ruby(a[2].value()));
 }
 
 TESTCASE(iterate_and_call_member)
@@ -218,9 +217,9 @@ TESTCASE(iterate_and_call_member)
   {
     v.push_back(it->to_s());
   }
-  ASSERT_EQUAL(42, from_ruby<int>(a[0].value()));
-  ASSERT_EQUAL(43, from_ruby<int>(a[1].value()));
-  ASSERT_EQUAL(44, from_ruby<int>(a[2].value()));
+  ASSERT_EQUAL(42, detail::Convert<int>::from_ruby(a[0].value()));
+  ASSERT_EQUAL(43, detail::Convert<int>::from_ruby(a[1].value()));
+  ASSERT_EQUAL(44, detail::Convert<int>::from_ruby(a[2].value()));
   ASSERT_EQUAL(3u, v.size());
   ASSERT_EQUAL(Object(a[0]).to_s(), v[0]);
   ASSERT_EQUAL(Object(a[1]).to_s(), v[1]);
@@ -232,7 +231,7 @@ TESTCASE(assign_int)
   Array a;
   a.push(42);
   a[0] = 10;
-  ASSERT_EQUAL(10, from_ruby<int>(a[0].value()));
+  ASSERT_EQUAL(10, detail::Convert<int>::from_ruby(a[0].value()));
 }
 
 /**

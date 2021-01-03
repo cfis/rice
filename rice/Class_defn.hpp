@@ -4,7 +4,6 @@
 #include "Object_defn.hpp"
 #include "Module_impl.hpp"
 #include "Module_defn.hpp"
-#include "to_from_ruby_defn.hpp"
 #include "Identifier.hpp"
 
 /*!
@@ -65,7 +64,7 @@ Class anonymous_class(
 
 } // namespace Rice
 
-template<>
+/*template<>
 inline
 Rice::Class from_ruby<Rice::Class>(VALUE x)
 {
@@ -77,7 +76,7 @@ inline
 VALUE to_ruby<Rice::Class>(Rice::Class const & x)
 {
   return x.value();
-}
+}*/
 
 #endif // Rice__Class_defn__hpp_
 

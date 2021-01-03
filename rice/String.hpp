@@ -1,11 +1,12 @@
 #ifndef Rice__String__hpp_
 #define Rice__String__hpp_
 
+#include <string>
+
+#include "detail/Convert.hpp"
 #include "Identifier.hpp"
 #include "Builtin_Object_defn.hpp"
-#include "to_from_ruby_defn.hpp"
 #include "detail/ruby.hpp"
-#include <string>
 
 namespace Rice
 {
@@ -69,21 +70,26 @@ public:
   Identifier intern() const;
 };
 
+namespace detail
+{
+
+template<>
+struct Convert<Rice::String>
+{
+  static Rice::String from_ruby(VALUE x)
+  {
+    return Rice::String(x);
+  }
+
+  static VALUE to_ruby(const Rice::String& x)
+  {
+    return x.value();
+  }
+};
+
+} // namespace detail
+
 } // namespace Rice
-
-template<>
-inline
-Rice::String from_ruby<Rice::String>(VALUE x)
-{
-  return Rice::String(x);
-}
-
-template<>
-inline
-VALUE to_ruby<Rice::String>(Rice::String const & x)
-{
-  return x.value();
-}
 
 #include "Builtin_Object.ipp"
 

@@ -211,24 +211,24 @@ TESTCASE(can_define_implicit_type_conversions_across_wrapped_types)
 
   // ACUTE
   result = m.instance_eval("is_acute(Degree.new(75))");
-  ASSERT(from_ruby<bool>(result.value()));
+  ASSERT(detail::Convert<bool>::from_ruby(result.value()));
 
   result = m.instance_eval("is_acute(Radian.new(2.0))");
-  ASSERT(!from_ruby<bool>(result.value()));
+  ASSERT(!detail::Convert<bool>::from_ruby(result.value()));
 
   // OBTUSE
   result = m.instance_eval("is_obtuse(Degree.new(75))");
-  ASSERT(!from_ruby<bool>(result.value()));
+  ASSERT(!detail::Convert<bool>::from_ruby(result.value()));
 
   result = m.instance_eval("is_obtuse(Radian.new(2.0))");
-  ASSERT(from_ruby<bool>(result.value()));
+  ASSERT(detail::Convert<bool>::from_ruby(result.value()));
 
   // RIGHT
   result = m.instance_eval("is_right(Degree.new(90))");
-  ASSERT(from_ruby<bool>(result.value()));
+  ASSERT(detail::Convert<bool>::from_ruby(result.value()));
 
   result = m.instance_eval("is_right(Radian.new(2.0))");
-  ASSERT(!from_ruby<bool>(result.value()));
+  ASSERT(!detail::Convert<bool>::from_ruby(result.value()));
 }
 
 namespace {
@@ -276,10 +276,10 @@ TESTCASE(supports_multiple_implicit_conversions_for_a_type)
   Object result;
 
   result = m.instance_eval("is_obtuse(Degree.new(75))");
-  ASSERT(!from_ruby<bool>(result.value()));
+  ASSERT(!detail::Convert<bool>::from_ruby(result.value()));
 
   result = m.instance_eval("explicit_value(Degree.new(75))");
-  ASSERT_EQUAL(75.0, from_ruby<float>(result.value()));
+  ASSERT_EQUAL(75.0, detail::Convert<float>::from_ruby(result.value()));
 }
 
 /**
@@ -332,18 +332,18 @@ TESTCASE(can_define_implicit_type_conversions_to_base_types)
 
   // As Real object
   Object result = m.instance_eval("real_value( Real.new(4) )");
-  ASSERT_EQUAL(4, from_ruby<int>(result.value()));
+  ASSERT_EQUAL(4, detail::Convert::from_ruby<int>(result.value()));
 
   // As fixnum (int)
   result = m.instance_eval("real_value(4)");
-  ASSERT_EQUAL(4, from_ruby<int>(result.value()));
+  ASSERT_EQUAL(4, detail::Convert::from_ruby<int>(result.value()));
 
   // As Real object
   result = m.instance_eval("r = make_real( Real.new(6) ); real_value(r)");
-  ASSERT_EQUAL(6, from_ruby<int>(result.value()));
+  ASSERT_EQUAL(6, detail::Convert::from_ruby<int>(result.value()));
 
   // As fixnum (int)
   result = m.instance_eval("r = make_real(6); real_value(r)");
-  ASSERT_EQUAL(6, from_ruby<int>(result.value()));
+  ASSERT_EQUAL(6, detail::Convert::from_ruby<int>(result.value()));
 }
 */

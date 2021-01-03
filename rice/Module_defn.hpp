@@ -3,7 +3,6 @@
 
 #include "Object_defn.hpp"
 #include "Module_impl.hpp"
-#include "to_from_ruby_defn.hpp"
 #include <memory>
 
 namespace Rice
@@ -70,7 +69,7 @@ Module anonymous_module();
 
 } // namespace Rice
 
-template<>
+/*template<>
 inline
 Rice::Module from_ruby<Rice::Module>(VALUE x)
 {
@@ -82,7 +81,7 @@ inline
 VALUE to_ruby<Rice::Module>(Rice::Module const & x)
 {
   return x.value();
-}
+}*/
 
 #endif // Rice__Module_defn__hpp_
 

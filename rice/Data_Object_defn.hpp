@@ -4,8 +4,7 @@
 #include "Object_defn.hpp"
 #include "Data_Type_fwd.hpp"
 #include "ruby_mark.hpp"
-#include "detail/to_ruby.hpp"
-#include "detail/ruby.hpp"
+#include "detail/Convert.hpp"
 
 /*! \file
  *  \brief Provides a helper class for wrapping and unwrapping C++
@@ -125,13 +124,30 @@ private:
 
 namespace detail
 {
-  template<typename T>
-  struct to_ruby_<Data_Object<T> >
+  template <typename T>
+  struct Convert<Rice::Data_Object<T>>
   {
-    static Rice::Object convert(Data_Object<T> const & x);
+    static T* from_ruby(VALUE x)
+    {
+      return Rice::Data_Object<T>(x).get();
+    }
+
+    static VALUE to_ruby(const Data_Object<T>& x)
+    {
+      return x.value();
+    }
+  };
+
+  template <typename T>
+  struct detail::Convert<Rice::Data_Object<T&>>
+  {
+    static T& from_ruby(VALUE x)
+    {
+      return *Rice::Data_Object<T>(x).get();
+    }
   };
 }
-
+  
 } // namespace Rice
 
 #endif // Rice__Data_Object_defn__hpp_

@@ -63,7 +63,7 @@ unsigned long Rice::Struct::
 offset_of(Identifier name) const
 {
   Symbol ruby_name(name);
-  return from_ruby<unsigned long>(member_offset_[ruby_name].value());
+  return Rice::detail::Convert<unsigned long>::from_ruby(member_offset_[ruby_name].value());
 }
 
 void Rice::Struct::

@@ -1,6 +1,5 @@
 #include "Exception.hpp"
 #include "protect.hpp"
-#include "to_from_ruby.hpp"
 #include "detail/ruby.hpp"
 
 #include <stdarg.h>
@@ -49,6 +48,6 @@ char const * Rice::Exception::
 what() const throw()
 {
   message_ = message();
-  return from_ruby<char const *>(message_);
+  return Rice::detail::Convert<char const *>::from_ruby(message_);
 }
 

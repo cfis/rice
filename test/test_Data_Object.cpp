@@ -140,7 +140,7 @@ TESTCASE(construct_from_pointer_and_klass_and_mark_and_free)
   ASSERT_EQUAL(foo, DATA_PTR(wrapped_foo.value()));
 }
 
-TESTCASE(construct_from_ruby_object)
+TESTCASE(from_ruby_object)
 {
   Foo * foo = new Foo;
   VALUE wrapped_foo = Data_Wrap_Struct(Data_Type<Foo>::klass(), 0, Default_Free_Function<Foo>::free, foo);
@@ -171,7 +171,7 @@ TESTCASE(construct_from_ruby_object_and_class)
   ASSERT_EQUAL(foo, DATA_PTR(data_object_foo.value()));
 }
 
-TESTCASE(construct_from_ruby_object_and_wrong_class)
+TESTCASE(from_ruby_object_and_wrong_class)
 {
   Foo * foo = new Foo;
   Data_Type<Foo> rb_cFoo;
@@ -234,7 +234,7 @@ TESTCASE(to_ruby)
   Data_Type<Foo> rb_cFoo;
   Foo * foo = new Foo;
   Data_Object<Foo> wrapped_foo(foo);
-  ASSERT_EQUAL(wrapped_foo.value(), to_ruby(wrapped_foo));
+  ASSERT_EQUAL(wrapped_foo.value(), detail::Convert<Data_Object<Foo>>::to_ruby(wrapped_foo));
 }
 
 TESTCASE(from_ruby)
@@ -242,7 +242,7 @@ TESTCASE(from_ruby)
   Data_Type<Foo> rb_cFoo;
   Foo * foo = new Foo;
   Data_Object<Foo> wrapped_foo(foo);
-  ASSERT_EQUAL(foo, from_ruby<Foo *>(wrapped_foo));
+  ASSERT_EQUAL(foo, detail::Convert<Data_Object<Foo>>::from_ruby(wrapped_foo));
 }
 
 TESTCASE(from_ruby_const_ref)
@@ -250,7 +250,7 @@ TESTCASE(from_ruby_const_ref)
   Data_Type<Foo> rb_cFoo;
   Foo * foo = new Foo;
   Data_Object<Foo> wrapped_foo(foo);
-  ASSERT_EQUAL(foo->x_, from_ruby<Foo const &>(wrapped_foo).x_);
+  ASSERT_EQUAL(foo->x_, detail::Convert<Foo const &>::from_ruby(wrapped_foo).x_);
 }
 
 TESTCASE(from_ruby_copy)
@@ -258,7 +258,7 @@ TESTCASE(from_ruby_copy)
   Data_Type<Foo> rb_cFoo;
   Foo * foo = new Foo;
   Data_Object<Foo> wrapped_foo(foo);
-  ASSERT_EQUAL(foo->x_, from_ruby<Foo>(wrapped_foo).x_);
+  ASSERT_EQUAL(foo->x_, detail::Convert<Data_Object<Foo>>::from_ruby(wrapped_foo)->x_);
 }
 
 TESTCASE(ruby_mark)

@@ -2,7 +2,6 @@
 #define Rice__Array__hpp_
 
 #include "Builtin_Object.hpp"
-#include "to_from_ruby_defn.hpp"
 #include "detail/ruby.hpp"
 #include <iterator>
 
@@ -192,21 +191,24 @@ private:
   Object tmp_;
 };
 
+namespace detail
+{
+  template<>
+  struct Convert<Rice::Array>
+  {
+    static Rice::Array from_ruby(VALUE x)
+    {
+      return Rice::Array(x);
+    }
+
+    static VALUE to_ruby(Rice::Array const& x)
+    {
+      return x.value();
+    }
+  };
+} // namespace Detail
+
 } // namespace Rice
-
-template<>
-inline
-Rice::Array from_ruby<Rice::Array>(VALUE x)
-{
-  return Rice::Array(x);
-}
-
-template<>
-inline
-VALUE to_ruby<Rice::Array>(Rice::Array const & x)
-{
-  return x.value();
-}
 
 #include "Array.ipp"
 

@@ -2,6 +2,7 @@
 #define Rice__detail__define_method_and_auto_wrap__hpp_
 
 #include "ruby.hpp"
+#include "Exception_Handler_defn.hpp"
 #include "../Identifier.hpp"
 #include "Arguments.hpp"
 

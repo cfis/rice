@@ -3,7 +3,6 @@
 
 #include "Builtin_Object_defn.hpp"
 #include "Array.hpp"
-#include "to_from_ruby_defn.hpp"
 #include "detail/ruby.hpp"
 #include <iterator>
 #include <type_traits>
@@ -208,21 +207,24 @@ private:
   mutable typename std::remove_const<Value_T>::type tmp_;
 };
 
+namespace detail
+{
+  template<>
+  struct Convert<Rice::Hash>
+  {
+    static Rice::Hash from_ruby(VALUE x)
+    {
+      return Rice::Hash(x);
+    }
+
+    static VALUE to_ruby(Rice::Hash const& x)
+    {
+      return x.value();
+    }
+  };
+} // namespace Detail
+
 } // namespace Rice
-
-template<>
-inline
-Rice::Hash from_ruby<Rice::Hash>(VALUE x)
-{
-  return Rice::Hash(x);
-}
-
-template<>
-inline
-VALUE to_ruby<Rice::Hash>(Rice::Hash const & x)
-{
-  return x.value();
-}
 
 #include "Hash.ipp"
 

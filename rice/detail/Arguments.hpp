@@ -1,10 +1,12 @@
 #ifndef Rice__Arguments__hpp_
 #define Rice__Arguments__hpp_
 
-#include "../Arg_impl.hpp"
 #include <sstream>
 #include <vector>
-#include "../to_from_ruby_defn.hpp"
+
+#include "ruby.hpp"
+#include "Convert.hpp"
+#include "../Arg_impl.hpp"
 
 namespace Rice {
 
@@ -101,7 +103,7 @@ namespace Rice {
         }
         else
         {
-          return from_ruby<Arg_T>(in);
+          return detail::Convert<Arg_T>::from_ruby(in);
         }
       }
 

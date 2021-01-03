@@ -1,10 +1,7 @@
 #ifndef Rice__Constructor__hpp_
 #define Rice__Constructor__hpp_
 
-// This causes problems with certain C++ libraries
-#undef TYPE
-
-#include "to_from_ruby_defn.hpp"
+#include "Object.hpp"
 
 namespace Rice
 {
