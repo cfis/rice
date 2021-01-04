@@ -14,33 +14,36 @@ namespace Rice
       static VALUE to_ruby(const T& x);
     };
 
-    template <typename T>
+/*    template <typename T>
     struct Convert<T&>
     {
-      static T& from_ruby(VALUE x)
+      using From_Type = std::decay_t<T>;
+      static T from_ruby(VALUE x)
       {
-        return *Convert<T*>::from_ruby(x);
+        return Convert<T>::from_ruby(x);
       }
 
       static VALUE to_ruby(T& x)
       {
         return Convert<T>::to_ruby(x);
       }
-    };
+    };*/
 
-    template <typename T>
+   /* template <typename T>
     struct Convert<const T&>
     {
-      static const T& from_ruby(VALUE x)
+      using From_Type = std::decay_t<T>;
+
+      static const T from_ruby(VALUE x)
       {
-        return *Convert<T*>::from_ruby(x);
+        return Convert<T>::from_ruby(x);
       }
 
       static VALUE to_ruby(const T& x)
       {
         return Convert<T>::to_ruby(x);
       }
-    };
+    };*/
   } // detail
 } // Rice
 

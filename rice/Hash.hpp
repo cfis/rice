@@ -210,9 +210,9 @@ private:
 namespace detail
 {
   template<>
-  struct Convert<Rice::Hash>
+  class From_Ruby<Rice::Hash> : public FromRubyAbstract<Rice::Hash>
   {
-    static Rice::Hash from_ruby(VALUE x)
+    Rice::Hash convert(VALUE x) override
     {
       return Rice::Hash(x);
     }

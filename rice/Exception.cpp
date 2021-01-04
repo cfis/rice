@@ -1,6 +1,6 @@
 #include "Exception.hpp"
 #include "protect.hpp"
-#include "detail/ruby.hpp"
+#include "detail/From_Ruby2.hpp"
 
 #include <stdarg.h>
 #define va_init_list(a,b) va_start(a,b)
@@ -48,6 +48,6 @@ char const * Rice::Exception::
 what() const throw()
 {
   message_ = message();
-  return Rice::detail::Convert<char const *>::from_ruby(message_);
+  return Rice::detail::From_Ruby<const char *>().nativeValue(message_);
 }
 

@@ -1,7 +1,7 @@
 #ifndef Rice__detail__Wrapped_Function__hpp_
 #define Rice__detail__Wrapped_Function__hpp_
 
-#include "ruby.hpp"
+#include "From_Ruby2.hpp"
 
 namespace Rice
 {
@@ -25,6 +25,8 @@ namespace detail
    * void - Meaning there is no return value. This is mapped to Qnil in Ruby
    * any other possible value */
   
+ 
+    
 template<typename Function_T, typename Return_T, typename Receiver_T, typename... Arg_Ts>
 class Wrapped_Function
 {
@@ -50,9 +52,8 @@ private:
   // Convert Ruby argv pointer to Ruby values
   std::vector<VALUE> getRubyValues(int argc, VALUE* argv);
 
-  // Convert Ruby values to C++ values
   template<typename std::size_t... I>
-  std::tuple<Arg_Ts...> getNativeValues(std::vector<VALUE>& values, std::index_sequence<I...>& indices);
+  std::tuple<Arg_Ts...> convertRubyValues(std::tuple<From_Ruby<Arg_Ts>...>& fromRubys, std::vector<VALUE>& values, std::index_sequence<I...>& indices);
 
   // Figure out the receiver of the function call
   Receiver_T getReceiver(VALUE receiver);

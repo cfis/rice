@@ -52,7 +52,7 @@ public:
     Iterator_T end = (*obj.*end_)();
     for(; it != end; ++it)
     {
-      Rice::protect(rb_yield, Convert<std::remove_pointer_t<Iterator_T>>::to_ruby(*it));
+      Rice::protect(rb_yield, From_Ruby<Iterator_T>().nativeValue(*it));
     }
     return self;
   }

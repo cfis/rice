@@ -4,8 +4,7 @@
 #include <sstream>
 #include <vector>
 
-#include "ruby.hpp"
-#include "Convert.hpp"
+#include "From_Ruby2_defn.hpp"
 #include "../Arg_impl.hpp"
 
 namespace Rice {
@@ -103,7 +102,7 @@ namespace Rice {
         }
         else
         {
-          return detail::Convert<Arg_T>::from_ruby(in);
+          return detail::template From_Ruby<Arg_T>::nativeValue(in);
         }
       }
 

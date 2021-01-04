@@ -1,9 +1,9 @@
 #ifndef Rice__Array__hpp_
 #define Rice__Array__hpp_
 
-#include "Builtin_Object.hpp"
-#include "detail/ruby.hpp"
 #include <iterator>
+#include "detail/From_Ruby2_defn.hpp"
+#include "Builtin_Object.hpp"
 
 namespace Rice
 {
@@ -194,9 +194,9 @@ private:
 namespace detail
 {
   template<>
-  struct Convert<Rice::Array>
+  class From_Ruby<Rice::Array> : public FromRubyAbstract<Rice::Array>
   {
-    static Rice::Array from_ruby(VALUE x)
+    Rice::Array convert(VALUE x) override
     {
       return Rice::Array(x);
     }

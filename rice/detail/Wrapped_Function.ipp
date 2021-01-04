@@ -1,7 +1,6 @@
 #ifndef Rice__detail__Wrapped_Function__ipp_
 #define Rice__detail__Wrapped_Function__ipp_
 
-#include "Convert.hpp"
 #include "method_data.hpp"
 #include "../ruby_try_catch.hpp"
 #include "../Data_Object_defn.hpp"
@@ -77,9 +76,9 @@ getRubyValues(int argc, VALUE* argv)
 template<typename Function_T, typename Return_T, typename Receiver_T, typename... Arg_Ts>
 template<std::size_t... I>
 std::tuple<Arg_Ts...> Wrapped_Function<Function_T, Return_T, Receiver_T, Arg_Ts...>::
-getNativeValues(std::vector<VALUE>& values, std::index_sequence<I...>& indices)
+convertRubyValues(std::tuple<From_Ruby<Arg_Ts>...>& fromRubys, std::vector<VALUE>& values, std::index_sequence<I...>& indices)
 {
-  return std::forward_as_tuple(this->arguments_->getArgumentOrDefault<Arg_Ts>(I, values[I])...);
+  return std::forward_as_tuple(std::get<I>(fromRubys).nativeValue(values[I])...);
 }
 
 template<typename Function_T, typename Return_T, typename Receiver_T, typename... Arg_Ts>
@@ -100,7 +99,7 @@ getReceiver(VALUE receiver)
   }
   else
   {
-    return Convert<Receiver_T>::from_ruby(receiver);
+    //return Convert<Receiver_T>::from_ruby(receiver);
   }
 }
 
@@ -116,7 +115,8 @@ invokeNative(NativeTypes& nativeArgs)
   else
   {
     Return_T result = std::apply(this->func_, nativeArgs);
-    return Convert<Return_T>::to_ruby(result);
+    // TODO
+    return Qnil;// Convert<Return_T>::to_ruby(result);
   }
 }
 
@@ -129,9 +129,12 @@ operator()(int argc, VALUE* argv, VALUE self)
     // Get the ruby values
     std::vector<VALUE> rubyValues = this->getRubyValues(argc, argv);
 
-    // Now convert the Ruby values to native values
+    // Now setup From_Ruby instances to do the conversion from Ruby to native 
+    // values and to store values so they stay in scope through the native call
+    std::tuple<From_Ruby<Arg_Ts>...> fromRubys;
+
     auto indices = std::make_index_sequence<sizeof...(Arg_Ts)>{};
-    std::tuple<Arg_Ts...> nativeValues = this->getNativeValues(rubyValues, indices);
+    std::tuple<Arg_Ts...> nativeValues = this->convertRubyValues(fromRubys, rubyValues, indices);
 
     // Now call the native method
     if constexpr (std::is_same_v<Receiver_T, std::nullptr_t>)
@@ -144,6 +147,7 @@ operator()(int argc, VALUE* argv, VALUE self)
       std::tuple<Receiver_T, Arg_Ts...> nativeArgs = std::tuple_cat(std::tuple(receiver), nativeValues);
       return this->invokeNative(nativeArgs);
     }
+    return Qnil;
   }
   catch (...)
   {

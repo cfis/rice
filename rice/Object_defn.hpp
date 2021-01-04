@@ -5,7 +5,7 @@
  */
 
 #include "Identifier.hpp"
-#include "detail/Convert.hpp"
+#include "detail/From_Ruby2_defn.hpp"
 
 #include <iosfwd>
 #include <vector>
@@ -211,9 +211,9 @@ extern Object const Undef;
 namespace detail
 {
   template<>
-  struct Convert<Rice::Object>
+  class From_Ruby<Rice::Object> : public FromRubyAbstract<Rice::Object>
   {
-    static Rice::Object from_ruby(VALUE x)
+    Rice::Object convert (VALUE x) override
     {
       return Rice::Object(x);
     }

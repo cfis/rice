@@ -3,7 +3,6 @@
 
 #include <string>
 
-#include "detail/Convert.hpp"
 #include "Identifier.hpp"
 #include "Builtin_Object_defn.hpp"
 #include "detail/ruby.hpp"
@@ -74,9 +73,9 @@ namespace detail
 {
 
 template<>
-struct Convert<Rice::String>
+class From_Ruby<Rice::String> : public FromRubyAbstract<Rice::String>
 {
-  static Rice::String from_ruby(VALUE x)
+  Rice::String convert(VALUE x) override
   {
     return Rice::String(x);
   }

@@ -47,9 +47,9 @@ public:
 namespace detail
 {
   template<>
-  struct Convert<Rice::Symbol>
+  class From_Ruby<Rice::Symbol> : public FromRubyAbstract<Rice::Symbol>
   {
-    static Rice::Symbol from_ruby(VALUE x)
+    Rice::Symbol convert(VALUE x) override
     {
       return Rice::Symbol(x);
     }

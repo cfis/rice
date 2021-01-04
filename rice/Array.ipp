@@ -1,8 +1,8 @@
 #ifndef Rice__Array__ipp_
 #define Rice__Array__ipp_
 
+#include "detail/From_Ruby2.hpp"
 #include "protect.hpp"
-#include "detail/Convert.hpp"
 
 inline Rice::Array::
 Array()
@@ -66,7 +66,7 @@ template<typename T>
 inline Rice::Object Rice::Array::
 push(T const & obj)
 {
-  return protect(rb_ary_push, value(), Rice::detail::Convert<T>::to_ruby(obj));
+  return protect(rb_ary_push, value(), Rice::detail::From_Ruby<T>().nativeValue(obj));
 }
 
 inline Rice::Object Rice::Array::
@@ -79,7 +79,7 @@ template<typename T>
 inline Rice::Object Rice::Array::
 unshift(T const & obj)
 {
-  return protect(rb_ary_unshift, value(), detail::Convert<int>::to_ruby(obj));
+  return protect(rb_ary_unshift, value(), detail::From_Ruby<int>().nativeValue(obj));
 }
 
 inline Rice::Object Rice::Array::
@@ -124,9 +124,11 @@ template<typename T>
 Rice::Object Rice::Array::Proxy::
 operator=(T const & value)
 {
+  /* TODO
   Object o = detail::Convert<T>::to_ruby(value);
   rb_ary_store(array_.value(), index_, o.value());
-  return o;
+  return o;*/
+  return Qnil;
 }
 
 template<typename Array_Ref_T, typename Value_T>

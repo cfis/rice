@@ -67,21 +67,25 @@ Module define_module(
  */
 Module anonymous_module();
 
+namespace detail
+{
+  template<>
+  class From_Ruby<Rice::Module> : public FromRubyAbstract<Rice::Module>
+  {
+    Rice::Module convert(VALUE x) override
+    {
+      return Rice::Module(x);
+    }
+
+    static VALUE to_ruby(Rice::Module const& x)
+    {
+      return x.value();
+    }
+  };
+} // namespace Detail
+
+
 } // namespace Rice
-
-/*template<>
-inline
-Rice::Module from_ruby<Rice::Module>(VALUE x)
-{
-  return Rice::Module(x);
-}
-
-template<>
-inline
-VALUE to_ruby<Rice::Module>(Rice::Module const & x)
-{
-  return x.value();
-}*/
 
 #endif // Rice__Module_defn__hpp_
 

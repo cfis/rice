@@ -5,8 +5,8 @@
 #include <map>
 #include <set>
 
+#include "detail/From_Ruby2_defn.hpp"
 #include "Class_defn.hpp"
-#include "detail/ruby.hpp"
 #include "Data_Object_defn.hpp"
 /*!
  *  \example map/map.cpp
@@ -263,7 +263,7 @@ namespace detail
 {
   /* These are the default implementations of from_ruby and to_ruby. If no other
      specializations are matched we assume we are dealing with wrapped C++ structs/classes. */
-  template <typename T>
+/*  template <typename T>
   T Convert<T>::from_ruby(VALUE x)
   {
     using Decayed_T = std::decay_t<T>;
@@ -274,24 +274,33 @@ namespace detail
   VALUE Convert<T>::to_ruby(const T& x)
   {
     return Rice::Data_Object<T>(new T(x), Rice::Data_Type<T>::klass());
-  }
+  }*/
 
-  // Specialize for pointers to structs/classes
   template <typename T>
-  struct Convert<T*>
+  class From_Ruby<T&> : public FromRubyAbstract<T&, T*>
   {
-    static T* from_ruby(VALUE x)
+    T* convert(VALUE x)
     {
       using Decayed_T = std::decay_t<T>;
       return Data_Type<Decayed_T>::from_ruby(x);
     }
-
-    static VALUE to_ruby(T* x)
+  };
+  
+  template <typename T>
+  class From_Ruby<T*> : public FromRubyAbstract<T*, T*>
+  {
+    T* convert(VALUE x)
+    {
+      using Decayed_T = std::decay_t<T>;
+      return Data_Type<Decayed_T>::from_ruby(x);
+    }
+  };
+/*    static VALUE to_ruby(T* x)
     {
       using Decayed_T = std::decay_t<T>;
       return Rice::Data_Object<Decayed_T>(x, Rice::Data_Type<T>::klass()).value();
-    }
-  };
+    }*/
+  
 }
 
 } // namespace Rice

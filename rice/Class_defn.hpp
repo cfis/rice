@@ -62,21 +62,24 @@ Class define_class(
 Class anonymous_class(
     Object superclass = rb_cObject);
 
-} // namespace Rice
-
-/*template<>
-inline
-Rice::Class from_ruby<Rice::Class>(VALUE x)
+namespace detail
 {
-  return Rice::Class(x);
+  template<>
+  class From_Ruby<Rice::Class> : public FromRubyAbstract<Rice::Class>
+  {
+    Rice::Class convert(VALUE x) override
+    {
+      return Rice::Class(x);
+    }
+
+    static VALUE to_ruby(Rice::Class const& x)
+    {
+      return x.value();
+    }
+  };
 }
 
-template<>
-inline
-VALUE to_ruby<Rice::Class>(Rice::Class const & x)
-{
-  return x.value();
-}*/
+} // namespace Rice
 
 #endif // Rice__Class_defn__hpp_
 
