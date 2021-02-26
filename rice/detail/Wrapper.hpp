@@ -18,10 +18,12 @@ public:
   void ruby_mark();
   void addKeepAlive(VALUE value);
 
+protected:
+  Wrapper() = default;
+
 private:
   // We use a vector for speed and memory locality versus a set which does
   // not scale when getting to tens of thousands of objects (not expecting
-  // that to happen...but just in case)
   std::vector<VALUE> keepAlive_;
 };
 
